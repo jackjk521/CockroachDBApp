@@ -65,54 +65,18 @@ const SignIn = () => {
 
     const filtered = () => {
         
-          return filterSensors.map(e => (
-                <DropdownButton
-                    alignRight
-                    title="Sensors to Add Filtered"
-                    id="dropdown-menu-align-right"
-                    onSelect={addHandler}>
+         const list = filterSensors.map((obj, index) => (
+                        <DropdownButton title="Sensors to Add Filtered" onSelect={addHandler} key = {index}>
 
-                    {   
-                        Object.keys(e).forEach((key, index) => {
-                        // console.log(e[key]); //work here
-                    
-                        if(e[key] === "No Sensor Setup")
-                            console.log(key);
-                                <Dropdown.Item eventKey={key} key={index} > {key} Sensor</Dropdown.Item>
-                        })
-                    }
-                </DropdownButton>
-
-            ))
+                            {   
+                                Object.keys(obj).map((key, index) => {
+                                    return (obj[key] === 'No Sensor Setup') ? <Dropdown.Item eventKey={key} key={index}> {key} Sensor </Dropdown.Item> : null
+                                })
+                            }
+                        </DropdownButton>
+                    ))
+        return list
     }
-
-//     const filtered2 = () => {
-        
-//         return filterSensors.map(e => (
-
-//             <div class="dropdown">
-//                 <button class="btn btn-secondary dropdown-toggle" onSelect={addHandler2} type="button"  data-bs-toggle="dropdown" aria-expanded="false">
-//                     Add filtered sensors
-//                 </button>
-//                 <ul class="dropdown-menu">
-//                     {   
-//                         Object.keys(e).forEach((key) => {
-//                         if(e[key] === "No Sensor Setup")
-//                             console.log(key);
-                            
-//                                 <>
-//                                     <li class="dropdown-item" name={key}> {key} Sensor</li>
-//                                 </>
-//                         })
-
-//                     }
-
-//                 </ul>
-//             </div>
-//         ))
-              
-//   }
-
 
     const addSensor = async (e) => {
         e.preventDefault();
@@ -190,6 +154,7 @@ const SignIn = () => {
 
                         {/*  filtered dropdown (not working) */}
                                 {filtered()}
+                               
 
                     </div>
                 </div>
