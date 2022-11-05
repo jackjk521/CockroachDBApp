@@ -13,3 +13,5 @@ import './bootstrap';
  */
 
 import './components/Main';
+
+import 'bootstrap/dist/css/bootstrap.css'

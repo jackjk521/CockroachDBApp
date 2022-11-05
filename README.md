@@ -10,3 +10,14 @@ npm install
 
 TO DO
 npm i express body-parser pg
+
+
+***Set:***
+
+change the database url in env to your own cockroachdb 
+
+run these:
+
+nodemon resources/js/server.js
+npm run dev
+php artisan serve
