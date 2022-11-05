@@ -8,7 +8,7 @@
         "@popperjs/core": "^2.10.2",
         "@vitejs/plugin-react": "^2.1.0",
         "axios": "^0.27.2",
-        "bootstrap": "^5.2.1",
+        "bootstrap": "^5.2.2",
         "laravel-vite-plugin": "^0.6.0",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
@@ -20,10 +20,13 @@
     "dependencies": {
         "body-parser": "^1.20.1",
         "cockroachdb": "^1.0.3",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
         "nodemon": "^2.0.20",
         "pg": "^8.8.0",
+        "react-bootstrap": "^2.5.0",
+        "react-router-dom": "^6.4.2",
         "router": "^1.3.7"
     }
 }

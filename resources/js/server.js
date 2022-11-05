@@ -1,10 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const { Pool, Client } = require('pg')
+const { Pool} = require('pg')
 const dotenv = require('dotenv')
 const app = express()
-const port = process.env.PGPORT || 3011
+const port = 3011
+const cors = require("cors");
 require('dotenv').config();
+
 
 const connectionString = (process.env.DB_URL);
 
@@ -18,38 +20,30 @@ app.use(
     extended: true,
   })
 )
+app.use(cors());
 
 // queries routes
-app.use("/", require("./deviceStateRoute"));
+app.use("/", require("./thingStateRoute"));
 
 // FOR TESTING
 
-const insertData = (request, response) => {
-    const createAccounts = 'CREATE TABLE IF NOT EXISTS accounts (id SERIAL PRIMARY KEY, balance INT)';
-    pool.query(createAccounts)
-    // const fix1 = 'SELECT MAX(id) FROM accounts';
-
-    // const fix2 = 'SELECT nextval(accounts_pkey_sequence)' ;
-
-    const insert = 'INSERT INTO accounts (id, balance) VALUES (1, 1000)'
-    // const delAccounts = pool.query('DROP TABLE accounts');
-
-      // pool.query(fix1)
-      // pool.query(fix2)
-    
-
-    pool.query(insert, (error, results) => {
-      if (error) {
+const genThingTable = (request, response) => {
+    const thingTable = 'CREATE TABLE IF NOT EXISTS thing (thing_id uuid DEFAULT gen_random_uuid() PRIMARY KEY NOT NULL, userName STRING NOT NULL, led STRING NOT NULL, sound STRING NOT NULL,  temp STRING NOT NULL, motion STRING NOT NULL,  heart STRING NOT NULL, user_id STRING NOT NULL)';
+    pool.query(thingTable, (error, results) => {
+      if (thingTable) {
+        console.log(results)
+        console.log("Sucess in creating table")
+      }
+      else{
         throw error
       }
-      response.status(200).json(results.rows)
     })
   }
 
+
 app.listen(port, () => {
   if(pool){
-    insertData()
+    genThingTable()
     console.log(`App running on port ${port}.`)
   }
-  
 })

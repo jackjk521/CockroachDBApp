@@ -1,14 +1,10 @@
-CREATE TABLE dev_states (
-    id SERIAL PRIMARY_KEY,
-    userID VARCHAR(255) UNIQUE, 
-    topic VARCHAR(255),
-    devState INT ,
-    date_created TIMESTAMP,
-)
-
-CREATE SCHEMA device (
-    id SERIAL PRIMARY_KEY,
-    userID VARCHAR(255) UNIQUE, 
-    topic VARCHAR(255),
-    devState INT ,
-)
+CREATE TABLE IF NOT EXISTS thing (
+  thing_id uuid DEFAULT gen_random_uuid() PRIMARY KEY NOT NULL,
+  userName STRING NOT NULL,
+  led STRING NOT NULL,
+  sound STRING NOT NULL,
+  temp STRING NOT NULL,
+  motion STRING NOT NULL,
+  heart STRING NOT NULL,
+  user_id STRING NOT NULL,
+);
