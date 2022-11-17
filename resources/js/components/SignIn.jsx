@@ -8,9 +8,9 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import ToggleButton from 'react-toggle-button'
 
 
-export const userHash = 'secretHashHere'
+// export const userHash = 'secretHashHere'
 
-const SignIn = () => {
+const SignIn = ({userHash, ethState, setEthState}) => {
    const navigate = useNavigate();
 
    const [thingState, setThingState] = useState({
@@ -52,13 +52,20 @@ const SignIn = () => {
         }))
     }
 
+    const logout = () => {
+        setEthState({...ethState, loggedIn: false})
+    }
 
     useEffect(() => { // reloads only once 
+        let cancel = false
         const filterList = async (e) => {
             const res = await axios.post("http://localhost:3011/getNoSetupDev", thingState);
-            setFilterSensors(res.data)
+            !cancel && setFilterSensors(res.data)
         };
         filterList();
+        return () => {
+            cancel = true
+        }
     }, []);
 
     console.log(filterSensors);
@@ -126,20 +133,21 @@ const SignIn = () => {
 
     return(
         <div>
+            <button onClick={logout}> Logout </button>
             <form className="LRForm" onSubmit = {addSensor}>
-                <div class='row p-2'>
-                    <div class="col-4 col-md-6">
+                <div className='row p-2'>
+                    <div className="col-4 col-md-6">
                         {/* userHash and userName */}
                         <input className ="inputBox" name = 'user_id' type="hidden"  onChange={handleInput} value={thingState.user_id|| ({userHash})}/>
                         <input className ="inputBox" name = 'userName' type="hidden"  onChange={handleInput} value={thingState.userName|| "Sample"}/>
                     
                         {/* led sensor switch */}
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" onChange={handleInput} role="switch" id="flexSwitchCheckDefault" name='led' value= 'Sensor Added' />
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Led Sensor</label>
+                        <div className="form-check form-switch">
+                            <input className="form-check-input" type="checkbox" onChange={handleInput} role="switch" id="flexSwitchCheckDefault" name='led' value= 'Sensor Added' />
+                            <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Led Sensor</label>
                         </div>
                     </div>
-                    <div class="col-8 col-md-6">
+                    <div className="col-8 col-md-6">
                         {/* not filtered dropdown */}
                         <DropdownButton    
                                 title="Sensors to Add"
@@ -159,10 +167,10 @@ const SignIn = () => {
                     </div>
                 </div>
             
-            <div class="col-12">
+            <div className="col-12">
                {/*  testing displays for changes */}
-               <div class="card">
-                <div class="card-body">
+               <div className="card">
+                <div className="card-body">
                     <h1> Testing display </h1>
                         <h4>Led sensor: {thingState.led}</h4>
                         <h4>Sound sensor: {thingState.sound}</h4>
@@ -172,7 +180,7 @@ const SignIn = () => {
                     </div>
                 </div>
             </div>
-            <div class="col-12">
+            <div className="col-12">
                 <button className="loginRegbuttons" type="submit"> Add Sensor </button>
             </div>            
             </form>
