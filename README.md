@@ -1,23 +1,20 @@
-Steps for setting up laravel
+Steps:
+composer i
+npm i 
+mv .env.example .env (same as cockroachdb)
+php artisan key:generate
 
-composer create-project laravel/laravel projName
-composer require laravel/ui
-php artisan ui react
-npm install
-npm run dev
+Run:
+npx hardhat run --network localhost scripts/deploy.js (to get the contractAddress)
 
-npm install 
+Go to /resources/js/Authentication.sol/Authentication.json 
+Add:
+"networks" : {"1337": {
+    "address" : "contactAddyHere"
+}}
 
-TO DO
-npm i express body-parser pg
-
-
-***Set:***
-
-change the database url in env to your own cockroachdb 
-
-run these:
-
+Run:(separate terminals)
 nodemon resources/js/server.js
 npm run dev
 php artisan serve
+npx hardhat node

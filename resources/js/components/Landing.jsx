@@ -34,42 +34,93 @@ const Landing = ({ ethState, setEthState }) =>{
         }
     }
 
+    useEffect(() => {
+
+      // Change between SignIn and SignOut forms
+      const signUpButton = document.getElementById('signUp');
+      const signInButton = document.getElementById('signIn');
+      const container = document.getElementById('container');
+      
+      signUpButton.addEventListener('click', () => {
+          container.classList.add("right-panel-active");
+      });
+      
+      signInButton.addEventListener('click', () => {
+          container.classList.remove("right-panel-active");
+      });
+  }, []);
+
     return (
-        <div className= "loginBody">
-          <MessageQueue messages={messages} removeMessage={removeMessage} />
-          <div className={`container ${addClass}`} id="container">
-            <div className="form-container sign-up-container">
+      //new edit
+            <div className="Login">
+            <MessageQueue messages={messages} removeMessage={removeMessage} />
+            <div className="container" id="container">
+                <div className="form-container sign-up-container">
+                    <form onSubmit={signUp}>
+                        <h1>Create Account</h1>
+                        <button className="loginRegbuttons">Sign Up</button>
+                    </form>
+                </div>
+                <div className="form-container sign-in-container">
+                    <form onSubmit={login}>
+                        <h1>Login</h1>
+                        <button className="loginRegbuttons">LOGIN</button>
+                    </form>
+                </div>
+                <div className="overlay-container">
+                    <div className="overlay">
+                        <div className="overlay-panel overlay-left">
+                            <h1>Welcome Back!</h1>
+                            <p>To keep connected with us please login with your personal info</p>
+                            <button className="ghost btn btn-danger" id="signIn">GO TO LOGIN</button>
+                        </div>
+                        <div className="overlay-panel overlay-right">
+                            <h1>Hello, Friend!</h1>
+                            <p>Enter your personal details and start journey with us</p>
+                            <button className="ghost btn btn-danger" id="signUp"> GO TO REGISTER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+     //   <div className= "loginBody">
+      //     <MessageQueue messages={messages} removeMessage={removeMessage} />
+      //     <div className={`container ${addClass}`} id="container">
+      //       <div className="form-container sign-up-container">
               
-              <form className="LRForm" onSubmit = {signUp}>
-                <h1 className="header1">Create Account</h1>
-                <button className="loginRegbuttons" type="submit"> REGISTER </button>
-              </form>
+      //         <form className="LRForm" onSubmit = {signUp}>
+      //           <h1 className="header1">Create Account</h1>
+      //           <button className="loginRegbuttons" type="submit"> REGISTER </button>
+      //         </form>
             
-            </div>
-            <div className="form-container sign-in-container">
+      //       </div>
+      //       <div className="form-container sign-in-container">
               
-              <form className="LRForm" onSubmit={login}>
-                <h1 className="header1">Login</h1>
-                <button className="loginRegbuttons" type="submit" > LOGIN </button>
-              </form>
+      //         <form className="LRForm" onSubmit={login}>
+      //           <h1 className="header1">Login</h1>
+      //           <button className="loginRegbuttons" type="submit" > LOGIN </button>
+      //         </form>
             
-            </div>
-            <div className="overlay-container">
-              <div className="overlay">
-                <div className="overlay-panel overlay-left">
-                  <button className="loginRegbuttons ghost" id="signIn" onClick= {()=> setAddClass("")}>
-                    GO TO LOGIN
-                  </button>
-                </div>
-                <div className="overlay-panel overlay-right">
-                  <button className="loginRegbuttons ghost" id="signUp" onClick= {()=> setAddClass("right-panel-active")}>
-                      GO TO REGISTER
-                  </button>
-                </div>
-                </div>
-            </div>
-          </div>
-      </div>
+      //       </div>
+      //       <div className="overlay-container">
+      //         <div className="overlay">
+      //           <div className="overlay-panel overlay-left">
+      //             <button className="loginRegbuttons ghost" id="signIn" onClick= {()=> setAddClass("")}>
+      //               GO TO LOGIN
+      //             </button>
+      //           </div>
+      //           <div className="overlay-panel overlay-right">
+      //             <button className="loginRegbuttons ghost" id="signUp" onClick= {()=> setAddClass("right-panel-active")}>
+      //                 GO TO REGISTER
+      //             </button>
+      //           </div>
+      //           </div>
+      //       </div>
+      //     </div>
+      // </div>
+
     );
 }
 
