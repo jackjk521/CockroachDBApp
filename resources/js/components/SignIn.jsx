@@ -13,6 +13,7 @@ const SignIn = ({userHash, ethState, setEthState}) => {
    const [thingState, setThingState] = useState({
             user_id: userHash, 
             userName: 'Sample',
+            name: "",
             led:'0',
             sound:'0',
             motion:'0',
@@ -66,6 +67,7 @@ const SignIn = ({userHash, ethState, setEthState}) => {
                 setThingState({
                             user_id:'',
                             userName:'',
+                            name:'',
                             led:'0',
                             sound:'0',
                             motion:'0',
@@ -126,7 +128,7 @@ const SignIn = ({userHash, ethState, setEthState}) => {
                         
                                             {   
                                                 Object.keys(obj).map((key, index) => {
-                                                    return (obj[key] === 'No Sensor Setup') ? <Dropdown.Item eventKey={key} key={index}> {key} Sensor </Dropdown.Item> : null
+                                                    return (obj[key] === '0') ? <Dropdown.Item eventKey={key} key={index}> {key} Sensor </Dropdown.Item> : null
                                                 })
                                             }
                                         </DropdownButton>
