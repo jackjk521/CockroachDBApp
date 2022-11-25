@@ -11,7 +11,7 @@ const AuthValidation = async ( accountAddress, web3, contract) => {
         let hash = await web3.eth.accounts.hashMessage(signedData);
         let hashFromContract = await contract.methods.getSignatureHash().call({ from: accountAddress });
 
-        return (hash === hashFromContract)? true : false
+        return {valid: (hash === hashFromContract)? true : false, hash: hash}
     }
 }
 

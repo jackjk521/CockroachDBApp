@@ -17,8 +17,8 @@ const Landing = ({ ethState, setEthState }) =>{
         } else {
           let hash = await AuthenticationHash(ethState.account, ethState.web3);
           await ethState.contract.methods.register(hash).send({ from: ethState.account });
+          await axios.post("http://localhost:3011/newUser", {user_id: hash});
           addMessage('Signup successful' , 'success')
-          console.log(hash)
         }
     }
 
@@ -30,7 +30,11 @@ const Landing = ({ ethState, setEthState }) =>{
           addMessage('This account does not exist', 'error')
         } else {
           let validated = await AuthValidation(ethState.account, ethState.web3, ethState.contract)
-          validated && setEthState({...ethState, loggedIn: true})
+          if(validated.valid) {
+            sessionStorage.setItem('user_id', validated.hash);
+            console.log("from landing: " + validated.hash)
+            setEthState({...ethState, loggedIn: true})
+          }
         }
     }
 

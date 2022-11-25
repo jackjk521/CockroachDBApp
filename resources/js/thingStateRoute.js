@@ -13,12 +13,41 @@ const pool = new Pool({
   connectionString,
 })
 
-// create a state for a topic?
+
+// registering a new user
+router.route("/newUser").post((req, res) =>{ 
+    const newUser = {
+        user_id: req.body.user_id,
+        name: '',
+        led: '0',
+        motion: '0',
+        sound: '0',
+        temp: '0',
+        heart: '0'
+    }
+
+    try{
+        pool.query('INSERT INTO thing (user_id, name, led, motion, sound, temp, heart) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        [newUser.user_id, newUser.name, newUser.led, newUser.motion, newUser.sound, newUser.temp, newUser.heart], (error, results) => {
+           if (error) {
+               res.status(404).send('There is an error in creation of a new user')
+               throw error
+           }
+           res.status(200).json(results.rows[0])
+       })
+    
+    }
+    catch(err){
+        console.log(err.message);
+    }
+})
+
+
+// addSensor
 
 router.route("/addSensor").post((req, res) =>{ 
     const stateInfo = {
         user_id: req.body.user_id,
-        userName: req.body.userName,
         name: req.body.name,
         led: req.body.led,
         motion: req.body.motion,
@@ -28,10 +57,10 @@ router.route("/addSensor").post((req, res) =>{
     }
 
     try{
-        pool.query('INSERT INTO thing (user_id, userName, name, led, motion, sound, temp, heart) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-        [stateInfo.user_id, stateInfo.userName, stateInfo.name, stateInfo.led, stateInfo.motion, stateInfo.sound, stateInfo.temp, stateInfo.heart], (error, results) => {
+        pool.query('INSERT INTO thing (user_id, name, led, motion, sound, temp, heart) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        [stateInfo.user_id, stateInfo.name, stateInfo.led, stateInfo.motion, stateInfo.sound, stateInfo.temp, stateInfo.heart], (error, results) => {
            if (error) {
-               res.status(404).send('There is an error in createState')
+               res.status(404).send('There is an error in the addsensor route')
                throw error
            }
            res.status(200).json(results.rows[0])
@@ -48,19 +77,13 @@ router.route("/getNoSetupDev").post((req, res) =>{
     const user_id = req.body.user_id
 
     try{
-        let ret;
         const result = pool.query('SELECT * FROM thing WHERE user_id = $1;',
             [user_id], (error, results) => {
             if (error) {
-                ret = [
-                    akralr
-                ]
                 res.status(404).send('The user with the given ID was not found.')
                 throw error
-
             }
-            ret = results.rows
-            res.status(200).json(ret)
+            res.status(200).json(results.rows)
         })
     
     }
@@ -73,7 +96,7 @@ router.route("/getNoSetupDev").post((req, res) =>{
 // get all devices of a userID
 router.route("/getDevices").post((req, res) =>{ 
     const user_id = req.body.user_id
-
+    console.log("userid in thingsRoute: " + user_id);
     try{
         const result = pool.query('SELECT * FROM thing WHERE user_id = $1;',
             [user_id], (error, results) => {

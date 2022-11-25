@@ -4,15 +4,18 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown'
-
-// export const userHash = 'secretHashHere'
+import * as mqtt from 'mqtt/dist/mqtt'
 
 const SignIn = ({userHash, ethState, setEthState}) => {
-   const navigate = useNavigate();
+    const hash = sessionStorage.getItem('user_id');
+    const navigate = useNavigate();
+    const client = mqtt.connect("ws://34.209.25.168:9001", {   // replace the IP with your AWS instance public IP address
+    username: "admin",  // your broker username
+    password: "admin",   // your broker password
+    }); 
 
    const [thingState, setThingState] = useState({
-            user_id: userHash, 
-            userName: 'Sample',
+            user_id: hash, 
             name: "name",
             led:'0',
             sound:'0',
@@ -42,7 +45,48 @@ const SignIn = ({userHash, ethState, setEthState}) => {
         setEthState({...ethState, loggedIn: false})
     }
 
-    useEffect(() => { // reloads only once 
+    useEffect(async () => {
+        // retrieves the user_id
+        
+        const req = {
+            params : {
+              user_id : hash
+            }
+          };
+          
+          console.log("Userhash in signin is: " + hash)
+
+          // to get all the devices from thing Table of a user_id
+          const res = await axios.post(`http://localhost:3011/getDevices`, thingState);
+          const thingList = res.data; // wont work since its not the only thing res.data
+      
+          const sensors = ['sound', 'temp', 'motion', 'heart'];
+          thingList.map(thing => {
+            sensors.forEach((sensor) => {
+              if(thing[sensor] != 'null') {
+                client.subscribe(`${thing.name}/${sensor}`);
+                console.log(`subscribed to ${thing.name}/${sensor}`);
+              }
+            });
+          });
+
+          client.on('message', async function(topic, message) {
+            const topicArr = topic.split('/');
+          //   const res = await axios.get('findThing', {params: {'name' : topicArr[0]}});
+            if(res.data.status == 200) {
+              // const update = await axios.patch('updateThing', {'name' : topicArr[0], 'sensor' : topicArr[1], 'value' : message});
+            }
+          //   let current = things;
+          //   current.find(thing => thing.name === topicArr[0])[topicArr[1]] = message;
+          //   setThings([...current]);
+          });
+      
+          // setThings(thingList);
+    }, []);
+
+  // dropdown filter 
+    useEffect(() => {
+      
         let cancel = false
         const filterList = async (e) => {
             const res = await axios.post("http://localhost:3011/getNoSetupDev", thingState);
@@ -52,10 +96,11 @@ const SignIn = ({userHash, ethState, setEthState}) => {
         return () => {
             cancel = true
         }
-    }, []);
+    }, [])
 
     console.log(filterSensors);
 
+    
     const addSensor = async (e) => {
         e.preventDefault();
 
@@ -66,7 +111,6 @@ const SignIn = ({userHash, ethState, setEthState}) => {
             {
                 setThingState({
                             user_id:'',
-                            userName:'',
                             name:'',
                             led:'0',
                             sound:'0',
@@ -89,13 +133,13 @@ const SignIn = ({userHash, ethState, setEthState}) => {
         e.preventDefault();
 
         try{
-            const res = await axios.post("http://localhost:3011/getDevices", thingState);
+            const res = await axios.post("http://localhost:3011/getDevices", thingState.user_id);
             if(res.status == 200)
             {
                 setDisplayDetails(res.data);
             }
             else{
-                console.log(Error);
+                console.log([]);
             }
           }
           catch(err){
@@ -112,7 +156,6 @@ const SignIn = ({userHash, ethState, setEthState}) => {
                         <div className="col-4 col-md-6">
                             {/* userHash , userName, name */}
                             <input className ="inputBox" name = 'user_id' type="hidden"  onChange={handleInput} value={thingState.user_id|| ({userHash})}/>
-                            <input className ="inputBox" name = 'userName' type="hidden"  onChange={handleInput} value={thingState.userName|| "Sample"}/>
                             <input className ="inputBox" name = 'name' type="hidden"  onChange={handleInput} value={thingState.name|| "name"}/>
                         
                             {/* led sensor switch */}
