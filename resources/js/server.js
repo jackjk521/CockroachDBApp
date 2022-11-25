@@ -28,11 +28,11 @@ app.use("/", require("./thingStateRoute"));
 // FOR TESTING
 
 const genThingTable = (request, response) => {
-    const thingTable = 'CREATE TABLE IF NOT EXISTS thing (thing_id uuid DEFAULT gen_random_uuid() PRIMARY KEY NOT NULL, userName STRING NOT NULL, led STRING NOT NULL, sound STRING NOT NULL,  temp STRING NOT NULL, motion STRING NOT NULL,  heart STRING NOT NULL, user_id STRING NOT NULL)';
+    const thingTable = 'CREATE TABLE IF NOT EXISTS thing (thing_id uuid DEFAULT gen_random_uuid() PRIMARY KEY NOT NULL, userName STRING NOT NULL, name STRING NOT NULL,  led STRING NOT NULL, sound STRING NOT NULL,  temp STRING NOT NULL, motion STRING NOT NULL,  heart STRING NOT NULL, user_id STRING NOT NULL)';
     pool.query(thingTable, (error, results) => {
       if (thingTable) {
         console.log(results)
-        console.log("Sucess in creating table")
+        console.log("Sucess in creating table") 
       }
       else{
         throw error

@@ -48,13 +48,19 @@ router.route("/getNoSetupDev").post((req, res) =>{
     const user_id = req.body.user_id
 
     try{
+        let ret;
         const result = pool.query('SELECT * FROM thing WHERE user_id = $1;',
             [user_id], (error, results) => {
             if (error) {
+                ret = [
+                    akralr
+                ]
                 res.status(404).send('The user with the given ID was not found.')
                 throw error
+
             }
-             res.status(200).json(results.rows)
+            ret = results.rows
+            res.status(200).json(ret)
         })
     
     }

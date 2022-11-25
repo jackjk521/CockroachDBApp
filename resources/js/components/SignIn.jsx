@@ -13,7 +13,7 @@ const SignIn = ({userHash, ethState, setEthState}) => {
    const [thingState, setThingState] = useState({
             user_id: userHash, 
             userName: 'Sample',
-            name: "",
+            name: "name",
             led:'0',
             sound:'0',
             motion:'0',
@@ -110,9 +110,10 @@ const SignIn = ({userHash, ethState, setEthState}) => {
                 <form className="LRForm" onSubmit = {addSensor}>
                     <div className='row p-2'>
                         <div className="col-4 col-md-6">
-                            {/* userHash and userName */}
+                            {/* userHash , userName, name */}
                             <input className ="inputBox" name = 'user_id' type="hidden"  onChange={handleInput} value={thingState.user_id|| ({userHash})}/>
                             <input className ="inputBox" name = 'userName' type="hidden"  onChange={handleInput} value={thingState.userName|| "Sample"}/>
+                            <input className ="inputBox" name = 'name' type="hidden"  onChange={handleInput} value={thingState.name|| "name"}/>
                         
                             {/* led sensor switch */}
                             <div className="form-check form-switch">
@@ -123,16 +124,26 @@ const SignIn = ({userHash, ethState, setEthState}) => {
                         <div className="col-8 col-md-6">
                             {/*  filtered dropdown */}
                                 {
-                                    filterSensors.map((obj, index) => (
-                                        <DropdownButton title="Sensors to Add Filtered" onSelect={addHandler} key = {index}>
-                        
-                                            {   
-                                                Object.keys(obj).map((key, index) => {
-                                                    return (obj[key] === '0') ? <Dropdown.Item eventKey={key} key={index}> {key} Sensor </Dropdown.Item> : null
-                                                })
-                                            }
-                                        </DropdownButton>
-                                    ))
+                                    (filterSensors.length != 0 )? (
+                                        filterSensors.map((obj, index) => (
+                                            <DropdownButton title="Sensors to Add Filtered" onSelect={addHandler} key = {index}>
+                            
+                                                {   
+                                                    Object.keys(obj).map((key, index) => {
+                                                        return (obj[key] === '0') ? <Dropdown.Item eventKey={key} key={index}> {key} Sensor </Dropdown.Item> : null
+                                                    })
+                                                }
+                                            </DropdownButton>
+                                        ))
+                                    ) : (
+                                            <DropdownButton title="Sensors Not Filtered" onSelect={addHandler} >
+                                                <Dropdown.Item eventKey="sound" > Sound Sensor </Dropdown.Item>
+                                                <Dropdown.Item eventKey="motion" > Motion Sensor </Dropdown.Item>
+                                                <Dropdown.Item eventKey="temp" > Temperature Sensor </Dropdown.Item>
+                                                <Dropdown.Item eventKey="heart" > Heart Sensor </Dropdown.Item>
+                                            </DropdownButton>
+                                    )
+                                    
                                 }
                         </div>
                     </div>
